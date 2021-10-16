@@ -3,19 +3,6 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-const sanitize = (string) => {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '/': '&#x2F;',
-  };
-  const reg = /[&<>"'/]/gi;
-  return string.replace(reg, (match) => map[match]);
-};
-
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -44,8 +31,8 @@ exports.handler = async (event) => {
 
     const s3Params = {
       Bucket: 'uploads.nicholasgriffin.dev',
-      Key: sanitize(uploadData.name),
-      ContentType: sanitize(uploadData.type),
+      Key: uploadData.name,
+      Expires: 60 * 60,
       ACL: 'public-read',
     };
 

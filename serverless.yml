@@ -14,6 +14,7 @@ provider:
     - Effect: 'Allow'
       Action:
         - 's3:getSignedUrl'
+        - 's3:*'
       Resource: 'arn:aws:s3:::uploads.nicholasgriffin.dev/*'
 
 package:
