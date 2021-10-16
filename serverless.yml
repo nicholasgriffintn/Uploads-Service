@@ -1,0 +1,54 @@
+service: serverless-uploads-service
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: eu-west-1
+  stackName: serverless-uploads-service-stack
+  apiName: serverless-uploads-service-api
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:getSignedUrl'
+      Resource: 'arn:aws:s3:::uploads.nicholasgriffin.dev/*'
+
+package:
+  patterns:
+    - '!.eslintrc.js'
+    - '!package-lock.json'
+    - '!package.json'
+    - '!yarn.lock'
+
+resources:
+  Resources:
+    UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: uploads.nicholasgriffin.dev
+        AccessControl: PublicRead
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - HEAD
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+
+functions:
+  process:
+    handler: processor.handler
+    description: Process uploads
+    timeout: 15
+    events:
+      - http:
+          path: signed
+          method: post
+          cors: true
