@@ -21,7 +21,7 @@
     "eslint-plugin-prettier": "^3.4.1",
     "prettier": "^2.3.2",
     "serverless": "^2.56.0",
-    "serverless-dotenv-plugin": "^3.9.0",
+    "serverless-dotenv-plugin": "^4.0.0",
     "serverless-offline": "^8.0.0"
   }
 }
